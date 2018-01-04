@@ -2,19 +2,52 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="shuffler.js"></script>
   <script src="site.js"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.bundle.min.js" integrity="sha384-VspmFJ2uqRrKr3en+IG0cIq1Cl/v/PHneDw6SQZYgrcr8ZZmZoQ3zhuGfMnSR/F2" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <div>
-    <div id="sloppy-shuffled-card" style="width: 128px; height: 200px; border: 1px solid black; margin: 20px;">
-      <br />
-      <span style="margin-left: -20px;" id="sloppy-deck-previous">&lt</span>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <div id="sloppy-shuffled-card" style="width: 128px; height: 200px; border: 1px solid black; margin: 20px;">
+          <br />
+          <span style="margin-left: -20px;" id="sloppy-deck-previous">&lt</span>
 
-      <p id="sloppy-number" style="text-align: center;"></p>
-      <p id="sloppy-of" style="text-align: center;"></p>
-      <p id="sloppy-suit" style="text-align: center;"></p>
+          <p id="sloppy-number" style="text-align: center;"></p>
+          <p id="sloppy-of" style="text-align: center;"></p>
+          <p id="sloppy-suit" style="text-align: center;"></p>
 
-      <span style="margin-left: 133px;" id="sloppy-deck-next">&gt</span>
+          <span style="margin-left: 133px;" id="sloppy-deck-next">&gt</span>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div id="pile-shuffled-card" style="width: 128px; height: 200px; border: 1px solid black; margin: 20px;">
+          <br />
+          <span style="margin-left: -20px;" id="pile-deck-previous">&lt</span>
+
+          <p id="pile-number" style="text-align: center;"></p>
+          <p id="pile-of" style="text-align: center;"></p>
+          <p id="pile-suit" style="text-align: center;"></p>
+
+          <span style="margin-left: 133px;" id="pile-deck-next">&gt</span>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div id="random-shuffled-card" style="width: 128px; height: 200px; border: 1px solid black; margin: 20px;">
+          <br />
+          <span style="margin-left: -20px;" id="random-deck-previous">&lt</span>
+
+          <p id="random-number" style="text-align: center;"></p>
+          <p id="random-of" style="text-align: center;"></p>
+          <p id="random-suit" style="text-align: center;"></p>
+
+          <span style="margin-left: 133px;" id="random-deck-next">&gt</span>
+        </div>
+      </div>
     </div>
   </div>
 </body>

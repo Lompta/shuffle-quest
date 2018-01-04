@@ -1,7 +1,9 @@
+// SETTING CONSTANTS
 // list of numbers up to length of standard deck
 const standardDeck = GenerateCards(52);
 const standardDeckConverter = CreateStandardDeckConverter();
 
+// Initializations and utilities
 function GenerateCards(deckSize) {
   let result = [];
 
@@ -21,6 +23,58 @@ function GetRandomInt(maxValue) {
   return Math.floor(Math.random() * maxValue) + 1;
 }
 
+// Converters
+// num should be between 0 and 51
+function ConvertNumberToCard(num) {
+  // these two should totally be global or at least set in an external function. when I try that I'm running into problems, though
+  let suits = ["Spades", "Diamonds", "Hearts", "Clubs"];
+  let numbers = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"];
+
+  let suit = suits[Math.floor(num/13)];
+  let number = numbers[(num + 1) % 13];
+
+  let result = {
+    number: number,
+    suit: suit
+  };
+
+  return result;
+}
+
+function ConvertCardToString(card) {
+  let result = card.number + " of " + card.suit;
+
+  return result;
+}
+
+function ConvertDeck(deck, converter) {
+  let result = [];
+  for (i = 0; i < deck.length; i++) {
+    result.push(converter[deck[i]]);
+  }
+
+  return result;
+}
+
+// Dictionary between a list of ints 0-51 to a list of corresponding cards.
+function CreateStandardDeckConverter() {
+  let result = {};
+
+  for (let i = 0; i < 52; i++) {
+    let card = ConvertNumberToCard(i);
+
+    // cards as strings;
+    //result[i] = ConvertCardToString(card);
+
+    //cards as objects
+    result[i] = card;
+  }
+
+  return result;
+}
+
+// Sloppy shuffle functions:
+// This is how I shuffle. Take some cards off top and bottom at once, then put 'em on top or bottom alternating.
 function ReturnFormattedSloppyShuffle(i) {
   var rawResult = SloppyShuffle(i, standardDeck);
   var result = ConvertDeck(rawResult, standardDeckConverter);
@@ -28,7 +82,6 @@ function ReturnFormattedSloppyShuffle(i) {
   return result;
 }
 
-// This is how I shuffle. Take some cards off top and bottom at once, then put 'em on top or bottom alternating.
 function SloppyShuffle(iterations, deck) {
   // At least two or three cards should be left in the middle.
   let deckLength = deck.length;
@@ -57,50 +110,64 @@ function SloppyShuffle(iterations, deck) {
   return deck;
 }
 
-// Dictionary between a list of ints 0-51 to a list of corresponding cards.
-function CreateStandardDeckConverter() {
-  let result = {};
+// Pile shuffle functions
+function ReturnFormattedPileShuffle(iterations, pileCount, deck) {
+  let rawResult = PileShuffle(iterations, pileCount, deck);
 
-  for (let i = 0; i < 52; i++) {
-    let card = ConvertNumberToCard(i);
+  var result = ConvertDeck(rawResult, standardDeckConverter);
+  return result;
+}
 
-    // cards as strings;
-    //result[i] = ConvertCardToString(card);
+function PileShuffleOnce(pileCount, deck) {
+  let deckLength = deck.length;
+  let result = [];
+  let pileCollection = [];
 
-    //cards as objects
-    result[i] = card;
+  //initialize pile collection
+  for (let h = 0; h < pileCount; h++) {
+    pileCollection.push([]);
+  }
+
+  // organize cards into piles within pileCollection
+  for (let i = 0; i < deckLength; i++) {
+    pileCollection[i%pileCount].push(deck[i]);
+  }
+
+  // randomly put the piles together in a stack
+  for (let j = 0; j < pileCount; j++) {
+    let selectedPile = GetRandomInt(pileCount - j) - 1;
+    result = result.concat(pileCollection[selectedPile]);
+    pileCollection.splice(selectedPile, 1);
   }
 
   return result;
 }
 
-// num should be between 0 and 51
-function ConvertNumberToCard(num) {
-  // these two should totally be global or at least set in an external function. when I try that I'm running into problems, though
-  let suits = ["Spades", "Diamonds", "Hearts", "Clubs"];
-  let numbers = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"];
+function PileShuffle(iterations, pileCount, deck) {
+  for (let i = 0; i < iterations; i++) {
+    deck = PileShuffleOnce(pileCount, deck);
+  }
 
-  let suit = suits[Math.floor(num/13)];
-  let number = numbers[(num + 1) % 13];
+  return deck;
+}
 
-  let result = {
-    number: number,
-    suit: suit
-  };
+// Random shuffle functions
+function ReturnFormattedRandomShuffle(deck) {
+  let rawResult = RandomShuffle(deck);
 
+  var result = ConvertDeck(rawResult, standardDeckConverter);
   return result;
 }
 
-function ConvertCardToString(card) {
-  let result = card.number + " of " + card.suit;
-
-  return result;
-}
-
-function ConvertDeck(deck, converter) {
+function RandomShuffle(deck) {
   let result = [];
-  for (i = 0; i < deck.length; i++) {
-    result.push(converter[deck[i]]);
+  let deckLength = deck.length;
+
+  // this could be DRYer with pile concatenation in pile shuffling - same core logic.
+  for (let i = 0; i < deckLength; i++) {
+    let selectedCard = GetRandomInt(deckLength - i) - 1;
+    result.push(deck[selectedCard]);
+    deck.slice(selectedCard, 1);
   }
 
   return result;
